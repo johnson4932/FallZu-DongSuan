@@ -1,6 +1,7 @@
 var express = require("express"),
     app     = express(),
     conn    = require("./routes/mysql"),
+    qs      = require('querystring');
     port    = 1234;
 
 app.configure(function() {
@@ -18,11 +19,38 @@ app.configure('development', function() {
 app.listen(port);
 
 app.get('/', function(req,res) {
-    res.render('index');
+    if (req.session.account && req.session.name) {
+        res.redirect('/admin');
+    } else {
+        res.redirect('/login');
+    }
 });
 
 app.get('/login', function(req,res) {
-    res.send('Login');
+    res.render('login',{Err:false});
+});
+
+app.get('/login/error', function(req,res) {
+    res.render('login',{Err:true});
+});
+
+app.post('/login', function(req,res) {
+    var data  = "",
+        params = null;
+    req.addListener("data", function(chunk) {
+        data += chunk;
+        params =  qs.parse(data);
+    });
+
+    var sql = "SELECT * FROM `vote_admin` WHERE Account=? AND Password=? LIMIT 1";
+    conn.db.query(sql, [params.account, params.passwd], function(err, rows, fiels) {
+        if (undefined == rows) {
+            res.redirect('/login/error');
+        } else {
+            //
+        }
+        console.log(rows[0].Name);
+    });
 });
 
 app.get('/admin', function(req,res) {

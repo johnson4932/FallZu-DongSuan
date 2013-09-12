@@ -31,7 +31,10 @@
                     <input type="text" class="form-control" name="account" placeholder="Account" autofocus>
                     <input type="password" class="form-control" name="passwd" placeholder="Password"><br>
                     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-                </form>
+                </form><br>
+                <% if (true == Err) { %>
+                <div class="alert alert-danger">Login Fail</div>
+                <% } %>
             </div><!-- end .container -->
         </div><!-- end #doc -->
     </body>
