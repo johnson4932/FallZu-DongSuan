@@ -19,7 +19,7 @@ app.configure('development', function() {
 app.listen(port);
 
 app.get('/', function(req,res) {
-    if (req.session.account && req.session.name) {
+    if (req.session.login && req.session.name) {
         res.redirect('/admin');
     } else {
         res.redirect('/login');
@@ -47,14 +47,19 @@ app.post('/login', function(req,res) {
         if (undefined == rows) {
             res.redirect('/login/error');
         } else {
-            //
+            req.session.login = rows[0].Account;
+            req.session.name = rows[0].Name;
+            res.redirect('/admin');
         }
-        console.log(rows[0].Name);
     });
 });
 
 app.get('/admin', function(req,res) {
-    res.send('Admin');
+    if ( undefined == req.session.login || undefined == req.session.name) {
+        res.redirect('/login');
+    } else {
+        res.send(req.session.login);
+    }
 });
 
 app.get('/votes/:vid', function(req,res) {
