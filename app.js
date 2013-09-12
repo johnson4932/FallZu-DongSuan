@@ -10,7 +10,7 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-    app.use(express.errorHandler());
+    this.use(express.errorHandler({showStack: true, dumpExceptions: true}));
 });
 
 app.listen(port);
