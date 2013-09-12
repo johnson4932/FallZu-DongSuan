@@ -3,7 +3,7 @@ var express = require("express"),
     conn    = require("./routes/mysql"),
     port    = 1234;
 
-app.configure(function(){
+app.configure(function() {
     this.set('views', __dirname + '/views');
     this.set('view engine', 'ejs');
     this.use(express.cookieParser());
@@ -11,12 +11,24 @@ app.configure(function(){
     this.use('/public',express.static(__dirname + '/public'));
 });
 
-app.configure('development', function(){
+app.configure('development', function() {
     this.use(express.errorHandler({showStack: true, dumpExceptions: true}));
 });
 
 app.listen(port);
 
-app.get('/',function(req,res){
+app.get('/', function(req,res) {
     res.render('index');
+});
+
+app.get('/login', function(req,res) {
+    res.send('Login');
+});
+
+app.get('/admin', function(req,res) {
+    res.send('Admin');
+});
+
+app.get('/votes/:vid', function(req,res) {
+    res.send(req.params.vid);
 });
