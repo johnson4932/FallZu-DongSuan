@@ -7,6 +7,7 @@ app.configure(function(){
     this.set('view engine', 'ejs');
     this.use(express.cookieParser());
     this.use(express.session({secret : "secret"}));
+    this.use(express.static(__dirname + '/public'));
 });
 
 app.configure('development', function(){
@@ -16,5 +17,5 @@ app.configure('development', function(){
 app.listen(port);
 
 app.get('/',function(req,res){
-    res.send("Hello");
+    res.render('index');
 });
