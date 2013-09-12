@@ -13,7 +13,7 @@ app.configure('development', function(){
     app.use(express.errorHandler());
 });
 
-app.listen(1234);
+app.listen(port);
 
 app.get('/',function(req,res){
     res.send("Hello");
