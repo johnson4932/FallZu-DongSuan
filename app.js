@@ -8,6 +8,7 @@ app.configure(function(){
     this.use(express.cookieParser());
     this.use(express.session({secret : "secret"}));
     this.use(express.static(__dirname + '/public'));
+    this.use('/public',express.static(__dirname + '/public'));
 });
 
 app.configure('development', function(){
