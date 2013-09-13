@@ -39,7 +39,7 @@ app.post('/login', function(req,res) {
 
     var sql = "SELECT * FROM `vote_admin` WHERE Account=? AND Password=? LIMIT 1";
     conn.db.query(sql, [params.account, params.passwd], function(err, rows, fiels) {
-        if (undefined == rows) {
+        if (0 == rows.length) {
             res.redirect('/login/error');
         } else {
             req.session.login = rows[0].Account;
