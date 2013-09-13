@@ -144,7 +144,8 @@
                     $.post('/api/createGroup', $('#createGroupModal form').serialize())
                     .done(function(data) {
                         $('#createGroupModal').modal('hide');
-                        console.log(data);
+                        var voteStatus = (true == data.Success) ? ('success') : ('danger');
+                        $('#alertMessage').html(data.Message).attr('class','alert alert-' + voteStatus).show();
                     })
                     .fail(function(err) {
                         $('#createGroupModal').modal('hide');
