@@ -58,7 +58,7 @@ app.get('/admin', function(req,res) {
     if ( undefined == req.session.login || undefined == req.session.name) {
         res.redirect('/login');
     } else {
-        res.send(req.session.login);
+        res.render('admin');
     }
 });
 
@@ -69,4 +69,36 @@ app.get('/votes/:vid', function(req,res) {
 app.get('/logout', function(req,res) {
     req.session.destroy();
     res.redirect('/login');
+});
+
+//API Session
+app.all('/api/*', function(req,res,next) {
+    if ( undefined == req.session.login || undefined == req.session.name) {
+        next(Error("Please Login"));
+    } else {
+        next();
+    }
+});
+
+app.post('/api/createVote', function(req,res) {
+    res.setHeader('Content-Type', 'application/json');
+    var data  = "",
+        params = null;
+    req.addListener("data", function(chunk) {
+        data += chunk;
+        params =  qs.parse(data);
+    });
+
+    if ('' != params.VoteName && '' != params.VoteDate) {
+        sql = "INSERT INTO `vote_list` VALUES(NULL,?,?)";
+        conn.db.query(sql,[params.VoteName, params.VoteDate], function(err,result) {
+            if (err) {
+                res.send(JSON.stringify({Success : false, Result: err, Message: 'Create Vote Fail, Database Error'}));
+                return;
+            }
+            res.send(JSON.stringify({Success : true, Result: result, Message: 'Create Vote Success'}));
+        });
+    } else {
+        res.send(JSON.stringify({Success : false, Message: 'Please inpu params'}));
+    }
 });

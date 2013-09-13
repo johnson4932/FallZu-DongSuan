@@ -116,7 +116,8 @@
                     $.post('/api/createVote', $('#createVoteModal form').serialize())
                     .done(function(data) {
                         $('#createVoteModal').modal('hide');
-                        console.log(data);
+                        var voteStatus = (true == data.Success) ? ('success') : ('danger');
+                        $('#alertMessage').html(data.Message).attr('class','alert alert-' + voteStatus).show();
                     })
                     .fail(function(err) {
                         $('#createVoteModal').modal('hide');
