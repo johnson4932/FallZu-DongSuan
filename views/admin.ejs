@@ -33,11 +33,11 @@
                             <div class="modal-body">
                                 <form>
                                     <div class="form-group">
-                                        <label for="VoteName">Vote Name</label>
+                                        <label>Vote Name</label>
                                         <input type="text" class="form-control" name="VoteName" placeholder="Vote Name">
                                     </div>
                                     <div class="form-group">
-                                        <label for="VoteDate">Vote Date</label>
+                                        <label>Vote Date</label>
                                         <input type="text" class="form-control" name="VoteDate" placeholder="2013-09-09">
                                     </div>
                                 </form>
@@ -61,7 +61,7 @@
                             <div class="modal-body">
                                 <form>
                                     <div class="form-group">
-                                        <label for="VoteName">Vote Name</label>
+                                        <label>Vote Name</label>
                                         <select class="form-control" name="VoteName">
                                             <option value="1">aaaa</option>
                                             <option value="2">bbbb</option>
@@ -75,7 +75,7 @@
                                             </label>
                                         </div>
                                         <div class="cloneDiv">
-                                            <label for="VoteName">Clone From...</label>
+                                            <label>Clone From...</label>
                                             <select class="form-control" name="cloneVote">
                                                 <option value="1">aaaa</option>
                                                 <option value="2">bbbb</option>
@@ -88,7 +88,7 @@
                                         <button class="btn btn-default addColumn">Add Column</button>
                                     </div>
                                     <div class="form-group group-name">
-                                        <label for="GroupName">Group Name</label>
+                                        <label>Group Name</label>
                                         <input type="text" class="form-control" name="GroupName[]" placeholder="委員">
                                     </div>
                                 </form>
@@ -111,9 +111,11 @@
             (function($){
                 //createVoteModal
                 $('#createVoteModal .submit').click(function(){
-                    $.post('/api/createVote', $('#createVoteModal form').serialize(), function(data) {
+                    $.post('/api/createVote', $('#createVoteModal form').serialize(), function(data,xhr) {
                         $('#createVoteModal').modal('hide');
                         console.log(data);
+                        console.log(xhr);
+                        alert(xhr.status);
                     });
                 });
 
