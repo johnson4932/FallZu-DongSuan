@@ -109,13 +109,18 @@
         </div><!-- end #doc -->
         <script>
             (function($){
+                $('#alertMessage').hide();
+
                 //createVoteModal
-                $('#createVoteModal .submit').click(function(){
-                    $.post('/api/createVote', $('#createVoteModal form').serialize(), function(data,xhr) {
+                $('#createVoteModal .submit').click(function() {
+                    $.post('/api/createVote', $('#createVoteModal form').serialize())
+                    .done(function(data) {
                         $('#createVoteModal').modal('hide');
                         console.log(data);
-                        console.log(xhr);
-                        alert(xhr.status);
+                    })
+                    .fail(function(err) {
+                        $('#createVoteModal').modal('hide');
+                        $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
                     });
                 });
 
@@ -135,9 +140,14 @@
                 });
 
                 $('#createGroupModal .submit').click(function() {
-                    $.post('/api/createGroup', $('#createGroupModal form').serialize(), function(data) {
+                    $.post('/api/createGroup', $('#createGroupModal form').serialize())
+                    .done(function(data) {
                         $('#createGroupModal').modal('hide');
                         console.log(data);
+                    })
+                    .fail(function(err) {
+                        $('#createGroupModal').modal('hide');
+                        $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
                     });
                 });
 
