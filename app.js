@@ -65,3 +65,8 @@ app.get('/admin', function(req,res) {
 app.get('/votes/:vid', function(req,res) {
     res.send(req.params.vid);
 });
+
+app.get('/logout', function(req,res) {
+    req.session.destroy();
+    res.redirect('/login');
+});
