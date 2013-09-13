@@ -111,8 +111,8 @@
             (function($){
                 //createVoteModal
                 $('#createVoteModal .submit').click(function(){
-                    $.post('/createVote', $('#createVoteModal form').serialize(), function(data) {
-                        $(this).parents('#createVoteModal').modal('hide');
+                    $.post('/api/createVote', $('#createVoteModal form').serialize(), function(data) {
+                        $('#createVoteModal').modal('hide');
                         console.log(data);
                     });
                 });
@@ -133,8 +133,8 @@
                 });
 
                 $('#createGroupModal .submit').click(function() {
-                    $.post('/createGroup', $('#createGroupModal form').serialize(), function(data) {
-                        $(this).parents('#createGroupModal').modal('hide');
+                    $.post('/api/createGroup', $('#createGroupModal form').serialize(), function(data) {
+                        $('#createGroupModal').modal('hide');
                         console.log(data);
                     });
                 });
