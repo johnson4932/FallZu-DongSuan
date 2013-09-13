@@ -35,12 +35,7 @@ app.get('/login/error', function(req,res) {
 });
 
 app.post('/login', function(req,res) {
-    var data  = "",
-        params = null;
-    req.addListener("data", function(chunk) {
-        data += chunk;
-        params =  qs.parse(data);
-    });
+    var params = getParams(req);
 
     var sql = "SELECT * FROM `vote_admin` WHERE Account=? AND Password=? LIMIT 1";
     conn.db.query(sql, [params.account, params.passwd], function(err, rows, fiels) {
@@ -82,12 +77,7 @@ app.all('/api/*', function(req,res,next) {
 
 app.post('/api/createVote', function(req,res) {
     res.setHeader('Content-Type', 'application/json');
-    var data  = "",
-        params = null;
-    req.addListener("data", function(chunk) {
-        data += chunk;
-        params =  qs.parse(data);
-    });
+    var params = getParams(req);
 
     if ('' != params.VoteName && '' != params.VoteDate) {
         sql = "INSERT INTO `vote_list` VALUES(NULL,?,?)";
@@ -102,3 +92,13 @@ app.post('/api/createVote', function(req,res) {
         res.send(JSON.stringify({Success : false, Message: 'Please inpu params'}));
     }
 });
+
+function getParams(req) {
+    var data  = "",
+        params = null;
+    req.addListener("data", function(chunk) {
+        data += chunk;
+        params =  qs.parse(data);
+    });
+    return params;
+}
