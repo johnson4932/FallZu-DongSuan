@@ -1,6 +1,8 @@
-var express = require("express"),
+var express = require('express'),
     app     = express(),
-    conn    = require("./routes/mysql"),
+    server  = require('http').createServer(app),
+    io      = require('socket.io').listen(server),
+    conn    = require('./routes/mysql'),
     qs      = require('querystring');
     port    = 1234;
 
@@ -16,7 +18,7 @@ app.configure('development', function() {
     this.use(express.errorHandler({showStack: true, dumpExceptions: true}));
 });
 
-app.listen(port);
+server.listen(port);
 
 app.get('/', function(req,res) {
     if (req.session.login && req.session.name) {
