@@ -6,8 +6,8 @@
         $.post('/api/createVote', $('#createVoteModal form').serialize())
         .done(function(data) {
             $('#createVoteModal').modal('hide');
-            var voteStatus = (true == data.Success) ? ('success') : ('danger');
-            $('#alertMessage').html(data.Message).attr('class','alert alert-' + voteStatus).show();
+            var Status = (true == data.Success) ? ('success') : ('danger');
+            $('#alertMessage').html(data.Message).attr('class','alert alert-' + Status).show();
         })
         .fail(function(err) {
             $('#createVoteModal').modal('hide');
@@ -34,11 +34,25 @@
         $.post('/api/createGroup', $('#createGroupModal form').serialize())
         .done(function(data) {
             $('#createGroupModal').modal('hide');
-            var voteStatus = (true == data.Success) ? ('success') : ('danger');
-            $('#alertMessage').html(data.Message).attr('class','alert alert-' + voteStatus).show();
+            var Status = (true == data.Success) ? ('success') : ('danger');
+            $('#alertMessage').html(data.Message).attr('class','alert alert-' + Status).show();
         })
         .fail(function(err) {
             $('#createGroupModal').modal('hide');
+            $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
+        });
+    });
+
+    //createAdminModal
+    $('#createAdminModal .submit').click(function() {
+        $.post('/api/createAdmin', $('#createAdminModal form').serialize())
+        .done(function(data) {
+            $('#createAdminModal').modal('hide');
+            var Status = (true == data.Success) ? ('success') : ('danger');
+            $('#alertMessage').html(data.Message).attr('class','alert alert-' + Status).show();
+        })
+        .fail(function(err) {
+            $('#createAdminModal').modal('hide');
             $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
         });
     });

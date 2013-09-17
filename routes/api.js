@@ -106,6 +106,30 @@ exports.createGroup = function(req,res) {
     }
 };
 
+exports.createAdmin = function(req,res) {
+    res.setHeader('Content-Type', 'application/json');
+    var params = getParams(req);
+
+    if ('' != params.Account && '' != params.Passwd) {
+        if (params.Passwd != params.PasswdConfirm) {
+            res.send(JSON.stringify({Success : false, Message: 'Password is different'}));
+            return;
+        }
+
+        var sql = "INSERT INTO `vote_admin` VALUES(?,?,?)";
+        conn.db.query(sql, [params.Account,params.Passwd,params.AdminName], function(err, result) {
+            if (err) {
+                res.send(JSON.stringify({Success : false, Result: err, Message: 'Create Admin Fail, Database Error'}));
+                return;
+            }
+            res.send(JSON.stringify({Success : true, Result: result, Message: 'Create Admin Success'}));
+        });
+    } else {
+        res.send(JSON.stringify({Success : false, Message: 'Please input params'}));
+        return;
+    }
+};
+
 exports.logout = function(req,res) {
     req.session.destroy();
     res.redirect('/login');
