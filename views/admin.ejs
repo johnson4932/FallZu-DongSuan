@@ -33,6 +33,28 @@
                 <% include createAdminModal %>
                 <div id="alertMessage" class="alert alert-success"></div><!-- end .alertMessage -->
 
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>VoteDate</th>
+                            <th>VoteName</th>
+                            <th>Reset</th>
+                            <th>Export</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (var key in Result) { %>
+                        <tr class="VoteList<%= Result[key].VID %>">
+                            <td><%= Result[key].VoteDate %></td>
+                            <td><a href="/vote/<%= Result[key].VID %>"><%= Result[key].VoteName %></a></td>
+                            <td><button class="resetVote btn btn-info">Reset</button></td>
+                            <td><button class="exportVote btn btn-primary">Export</button></td>
+                            <td><button class="deleteVote btn btn-danger">Delete</button></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
             </div><!-- end .container -->
         </div><!-- end #doc -->
         <script src="/public/js/admin.js"></script>
