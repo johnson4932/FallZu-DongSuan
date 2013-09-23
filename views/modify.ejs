@@ -5,8 +5,14 @@
         <div id="doc">
             <% include defaultNavbar %>
             <div class="container">
+                <h3 class="text-center"><%= Vote[0].VoteName %> - <%= Vote[0].VoteDate %></h3>
                 <div class="row">
                     <div class="col-md-6">
+                        <a data-toggle="modal" href="#createGroupModal"><button class="btn btn-primary">Create Group</button></a>
+                        <% include createGroupModal %>
+                        <hr>
+                        <div id="alertGroupMessage"></div><!-- end .alertGroupMessage -->
+                        <hr>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -15,30 +21,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="group1">
-                                    <td>AAAAA</td>
-                                    <td><button type="button" class="close delGroup1111">&times;</button></td>
+                                <% for (var key in Group) { %>
+                                <tr class="group<%= Group[key].VGID %>">
+                                    <td><%= Group[key].Title %></td>
+                                    <td><button type="button" class="close delGroup">&times;</button></td>
                                 </tr>
+                                <% } %>
                             </tbody>
                         </table>
                     </div>
                     <div class="col-md-6">
                         <form class="form-inline">
-                            <input type="hidden" name="VID" value="1">
+                            <input type="hidden" name="VID" value="<%= VID %>">
                             <div class="form-group">
-                                <input type="text" name="CandidateNubmer" class="form-control" placeholder="Number">
+                                <input type="text" name="CandidateNubmer" class="form-control CandidateNubmer" placeholder="Number">
                             </div>
                             <div class="form-group">
-                                <input type="text" name="CandidateName" class="form-control" placeholder="Name">
+                                <input type="text" name="CandidateName" class="form-control CandidateName" placeholder="Name">
                             </div>
                             <div class="form-group">
                                 <button id="addCandidate" class="btn btn-primary">新增</button>
                             </div>
                         </form>
-                        <hr/>
-                        <div id="alertCandidateMessage" class="alert alert-success">1231231</div><!-- end .alertCandidateMessage -->
-                        <hr/>
-                        <table class="table">
+                        <hr>
+                        <div id="alertCandidateMessage"></div><!-- end .alertCandidateMessage -->
+                        <hr>
+                        <table class="table CandidateList">
                             <thead>
                                 <tr>
                                     <th>Num.</th>
@@ -47,11 +55,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="Candidate1111">
-                                    <td>1</td>
-                                    <td>TEST</td>
-                                    <td><button type="button" class="close delCandidate1111">&times;</button></td>
+                                <% for (var key in Candidate) { %>
+                                <tr class="Candidate UID<%= Candidate[key].UID %>">
+                                    <td><%= Candidate[key].Number %></td>
+                                    <td><%= Candidate[key].Name %></td>
+                                    <td><button type="button" class="close delCandidate">&times;</button></td>
                                 </tr>
+                                <% } %>
                             </tbody>
                         </table>
                     </div>
@@ -60,16 +70,18 @@
         </div><!-- end #doc -->
         <script>
             (function($){
-                $('#alertCandidateMessage').hide();
+                $('.alert').hide();
 
                 $('#addCandidate').click(function(e) {
                     e.preventDefault();
                     $.post('/api/createCandidate', $(this).parents('form').serialize())
                     .done(function(data) {
                         console.log(data);
+                        var Status = (true == data.Success) ? ('success') : ('danger');
+                        $('#alertCandidateMessage').html(data.Message).attr('class','alert alert-' + Status).show();
                     })
                     .fail(function(err) {
-
+                        $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
                     });
                 });
             })(jQuery);
