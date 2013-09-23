@@ -27,6 +27,7 @@ exports.login = function(req,res) {
 };
 
 exports.APIsession = function(req,res,next) {
+    res.setHeader('Content-Type', 'application/json');
     if ( undefined == req.session.login || undefined == req.session.name) {
         next(Error("Please Login"));
     } else {
@@ -35,7 +36,6 @@ exports.APIsession = function(req,res,next) {
 };
 
 exports.createVote = function(req,res) {
-    res.setHeader('Content-Type', 'application/json');
     var params = getParams(req);
 
     if ('' != params.VoteName && '' != params.VoteDate) {
@@ -53,7 +53,6 @@ exports.createVote = function(req,res) {
 };
 
 exports.createGroup = function(req,res) {
-    res.setHeader('Content-Type', 'application/json');
     var params = getParams(req);
 
     if (params.clone) {
@@ -106,8 +105,25 @@ exports.createGroup = function(req,res) {
     }
 };
 
+exports.createCandidate = function(req,res) {
+    var params = getParams(req);
+
+    if ('' != params.VID || '' != params.CandidateNubmer || '' != params.CandidateName) {
+        var sql = "INSERT INTO `vote_candidate` VALUES(NULL,?,0,?,?)";
+        conn.db.query(sql, [params.VID,params.CandidateNubmer,params.CandidateName], function(err, result) {
+            if (err) {
+                res.send(JSON.stringify({Success : false, Result: err, Message: 'Create Candidate Fail, Database Error'}));
+                return;
+            }
+            res.send(JSON.stringify({Success : true, Result: result, Message: 'Create Candidate Success'}));
+        });
+    } else {
+        res.send(JSON.stringify({Success : false, Message: 'Please input params'}));
+        return;
+    }
+};
+
 exports.createAdmin = function(req,res) {
-    res.setHeader('Content-Type', 'application/json');
     var params = getParams(req);
 
     if ('' != params.Account && '' != params.Passwd) {
