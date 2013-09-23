@@ -66,7 +66,7 @@ exports.createGroup = function(req,res) {
             var insertParams = [];
             for (var key in rows) {
                 insertSQL += "(NULL,?,?),";
-                insertParams.push(params.VoteName);
+                insertParams.push(params.VID);
                 insertParams.push(rows[key].Title);
             }
 
@@ -91,7 +91,7 @@ exports.createGroup = function(req,res) {
                 continue;
             }
             sql += "(NULL,?,?),";
-            insertParams.push(params.VoteName);
+            insertParams.push(params.VID);
             insertParams.push(params.GroupName[key]);
         }
 
