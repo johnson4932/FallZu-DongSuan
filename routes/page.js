@@ -40,9 +40,16 @@ exports.modify = function (req,res) {
         async.parallel([
             function(callback){ conn.db.query("SELECT * FROM `vote_candidate` WHERE `VID`=?", [VID], function(err, result){ callback(err, result);}); },
             function(callback){ conn.db.query("SELECT * FROM `vote_group` WHERE `VID`=?", [VID], function(err, result){ callback(err, result);}); },
-            function(callback){ conn.db.query("SELECT * FROM `vote_list` WHERE `VID`=? LIMIT 1", [VID], function(err, result){ callback(err, result);}); }
+            function(callback){ conn.db.query("SELECT * FROM `vote_list` WHERE `VID`=? LIMIT 1", [VID], function(err, result){ callback(err, result);}); },
+            function(callback){ conn.db.query("SELECT * FROM `vote_list` WHERE `VID`<>?", [VID], function(err, result){ callback(err, result);}); }
         ], function(err, result) {
-            res.render('modify',{VID:VID, Candidate:result[0], Group:result[1], Vote:result[2]});
+            res.render('modify',{
+                VID         :VID,
+                Candidate   :result[0],
+                Group       :result[1],
+                Vote        :result[2],
+                OtherVote   :result[3]
+            });
         });
     }
 }

@@ -5,7 +5,7 @@
         <div id="doc">
             <% include defaultNavbar %>
             <div class="container">
-                <h3 class="text-center"><%= Vote[0].VoteName %> - <%= Vote[0].VoteDate %></h3>
+                <h3 class="text-center"><%= Vote[0].VoteDate %> - <%= Vote[0].VoteName %></h3>
                 <div class="row">
                     <div class="col-md-6">
                         <a data-toggle="modal" href="#createGroupModal"><button class="btn btn-primary">Create Group</button></a>
@@ -31,7 +31,7 @@
                         </table>
                     </div>
                     <div class="col-md-6">
-                        <form class="form-inline">
+                        <form class="form-inline text-right">
                             <input type="hidden" name="VID" value="<%= VID %>">
                             <div class="form-group">
                                 <input type="text" name="CandidateNubmer" class="form-control CandidateNubmer" placeholder="Number">

@@ -9,10 +9,6 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label>Vote Name</label>
-                        <select class="form-control" name="VoteName">
-                            <option value="1">aaaa</option>
-                        </select>
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" class="clone" name="clone" value="1" checked>
@@ -22,7 +18,9 @@
                         <div class="cloneDiv">
                             <label>Clone From...</label>
                             <select class="form-control" name="cloneVote">
-                                <option value="1">aaaa</option>
+                                <% for (var key in OtherVote) { %>
+                                <option value="<%= OtherVote[key].VID %>"><%= OtherVote[key].VoteName %></option>
+                                <% } %>
                             </select>
                         </div>
                     </div>
