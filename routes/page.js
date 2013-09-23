@@ -12,10 +12,7 @@ exports.login = function(req,res) {
 };
 
 exports.vote = function(req,res) {
-    var obj = {Login:false};
-    if (req.session.login && req.session.name) {
-        //obj.Login
-    }
+    var obj = {Login:req.session.login};
     res.render('votes',obj);
 };
 
