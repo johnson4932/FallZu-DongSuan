@@ -24,6 +24,7 @@ app.get('/', page.index);
 app.get('/login', page.login);
 app.get('/login/error', page.loginFail);
 app.get('/admin', page.admin);
+app.get('/modify/:vid', page.modify);
 app.get('/votes/:vid', page.vote);
 app.get('/logout', api.logout);
 

@@ -31,6 +31,14 @@ exports.admin = function(req,res) {
     }
 };
 
+exports.modify = function (req,res) {
+    if ( undefined == req.session.login || undefined == req.session.name) {
+        res.redirect('/login');
+    } else {
+        res.render('modify',{VID:req.params.vid});
+    }
+}
+
 exports.loginFail = function(req,res) {
     res.render('login',{Err:true});
 };
