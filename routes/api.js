@@ -16,7 +16,8 @@ exports.login = function(req,res) {
     var params = getParams(req);
 
     var sql = "SELECT * FROM `vote_admin` WHERE Account=? AND Password=? LIMIT 1";
-    conn.db.query(sql, [params.account, params.passwd], function(err, rows, fiels) {
+    var md5 = crypto.createHash('md5').update(params.Passwd).digest("hex");
+    conn.db.query(sql, [params.Account, md5], function(err, rows, fiels) {
         if (0 == rows.length) {
             res.redirect('/login/error');
         } else {
