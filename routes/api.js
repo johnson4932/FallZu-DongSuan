@@ -1,4 +1,5 @@
 var conn    = require('../routes/mysql'),
+    crypto  = require('crypto');
     qs      = require('querystring');
 
 function getParams(req) {
@@ -133,7 +134,8 @@ exports.createAdmin = function(req,res) {
         }
 
         var sql = "INSERT INTO `vote_admin` VALUES(?,?,?)";
-        conn.db.query(sql, [params.Account,params.Passwd,params.AdminName], function(err, result) {
+        var md5 = crypto.createHash('md5').update(params.Passwd).digest("hex");
+        conn.db.query(sql, [params.Account,md5,params.AdminName], function(err, result) {
             if (err) {
                 res.send(JSON.stringify({Success : false, Result: err, Message: 'Create Admin Fail, Database Error'}));
                 return;
