@@ -218,6 +218,19 @@ exports.modifyCandidate = function(req,res) {
     });
 }
 
+exports.deleteGroup = function(req,res) {
+    var params = getParams(req);
+
+    conn.db.query("DELETE FROM `vote_group` WHERE `VGID`=?", [params.VGID], function(err, result) {
+        if (err) {
+            res.send(JSON.stringify({Success : false, Result: err, Message: 'Delete Group Fail, Database Error'}));
+            return;
+        }
+        res.send(JSON.stringify({Success : true, Result: result, Message: 'Delete Group Success'}));
+        conn.db.query("UPDATE `vote_candidate` SET `VGID`='0' WHERE `VGID`=?", [params.VGID]);
+    });
+}
+
 exports.logout = function(req,res) {
     req.session.destroy();
     res.redirect('/login');

@@ -190,6 +190,26 @@
                     });
                 });
 
+                //delGroup
+                $('.delGroup').click(function() {
+                    var tr = $(this).parents('tr');
+                    var VGID = tr.attr('class').replace('group','');
+                    if (!confirm('Sure?')) {
+                        return;
+                    }
+                    $.post('/api/deleteGroup', {VGID:VGID})
+                    .done(function(data) {
+                        if (true == data.Success){
+                            tr.remove();
+                        } else {
+                            alert(data.Message);
+                        }
+                    })
+                    .fail(function(err) {
+                        alert('DELETE Fail');
+                    })
+                });
+
             })(jQuery);
         </script>
     </body>
