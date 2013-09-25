@@ -216,7 +216,6 @@ exports.modifyCandidate = function(req,res) {
         }
         res.send(JSON.stringify({Success : true, Result: result, Message: 'Update Candidate Success'}));
     });
-
 }
 
 exports.logout = function(req,res) {
