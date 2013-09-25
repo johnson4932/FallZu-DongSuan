@@ -5,7 +5,26 @@
         <div id="doc">
             <% include defaultNavbar %>
             <div class="container">
-                <h3 class="text-center"><%= Vote[0].VoteDate %> - <%= Vote[0].VoteName %></h3>
+                <h3 class="text-center">
+                    <span class="modify-data modifyVote">
+                        <span class="text-data">
+                            <%= Vote[0].VoteDate %>
+                        </span>
+                        <form class="input-data">
+                            <input type="hidden" name="VID" value="<%= VID %>">
+                            <input type="text" class="form-control" name="VoteDate" value="<%= Vote[0].VoteDate %>">
+                        </form>
+                    </span> -
+                    <span class="modify-data modifyVote">
+                        <span class="text-data">
+                            <%= Vote[0].VoteName %>
+                        </span>
+                        <form class="input-data">
+                            <input type="hidden" name="VID" value="<%= VID %>">
+                            <input type="text" class="form-control" name="VoteName" value="<%= Vote[0].VoteName %>">
+                        </form>
+                    </span>
+                </h3>
                 <div class="row">
                     <div class="col-md-6">
                         <a class="btn btn-primary" data-toggle="modal" href="#createGroupModal">Create Group</a>
@@ -23,7 +42,17 @@
                             <tbody>
                                 <% for (var key in Group) { %>
                                 <tr class="group<%= Group[key].VGID %>">
-                                    <td><%= Group[key].Title %></td>
+                                    <td>
+                                        <span class="modify-data modifyGroup">
+                                            <span class="text-data">
+                                                <%= Group[key].Title %>
+                                            </span>
+                                            <form class="input-data">
+                                                <input type="hidden" name="VGID" value="<%= Group[key].VGID %>">
+                                                <input type="text" class="form-control" name="Title" value="<%= Group[key].Title %>">
+                                            </form>
+                                        </span>
+                                    </td>
                                     <td><button type="button" class="close delGroup">&times;</button></td>
                                 </tr>
                                 <% } %>
@@ -57,8 +86,28 @@
                             <tbody>
                                 <% for (var key in Candidate) { %>
                                 <tr class="Candidate UID<%= Candidate[key].UID %>">
-                                    <td><%= Candidate[key].Number %></td>
-                                    <td><%= Candidate[key].Name %></td>
+                                    <td>
+                                        <span class="modify-data modifyCandidate">
+                                            <span class="text-data">
+                                                <%= Candidate[key].Number %>
+                                            </span>
+                                            <form class="input-data">
+                                                <input type="hidden" name="UID" value="<%= Candidate[key].UID %>">
+                                                <input type="text" class="form-control" name="Number" value="<%= Candidate[key].Number %>">
+                                            </form>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="modify-data modifyCandidate">
+                                            <span class="text-data">
+                                                <%= Candidate[key].Name %>
+                                            </span>
+                                            <form class="input-data">
+                                                <input type="hidden" name="UID" value="<%= Candidate[key].UID %>">
+                                                <input type="text" class="form-control" name="Name" value="<%= Candidate[key].Name %>">
+                                            </form>
+                                        </span>
+                                    </td>
                                     <td><button type="button" class="close delCandidate">&times;</button></td>
                                 </tr>
                                 <% } %>
@@ -72,6 +121,7 @@
             (function($){
                 $('.alert').hide();
                 $('.cloneDiv').hide();
+                $('.modify-data > .input-data').hide();
 
                 //createGroupModal
                 $('#createGroupModal .clone').click(function() {
@@ -115,6 +165,22 @@
                         $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
                     });
                 });
+
+
+                //Modify
+                $('.modify-data > .text-data').click(function() {
+                    $(this).hide();
+                    $(this).parent().find('.input-data').show().find('input').focus();
+                });
+
+                $('.modify-data > .input-data > input').blur(function() {
+                    var form = $(this).parent();
+                    var action = form.parent().attr('class').replace('modify-data ','');
+                    form.hide();
+                    form.parent().find('.text-data').show();
+                    console.log(form.serialize());
+                });
+
             })(jQuery);
         </script>
     </body>
