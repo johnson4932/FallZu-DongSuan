@@ -149,6 +149,34 @@ exports.createAdmin = function(req,res) {
     }
 };
 
+exports.modifyVote = function(req,res) {
+    var params = getParams(req);
+
+    var sql = "UPDATE `vote_list` SET ";
+    var prepare = [];
+
+    if (undefined != params.VoteDate) {
+        sql += "VoteDate=? ";
+        prepare.push(params.VoteDate);
+    }
+
+    if (undefined != params.VoteName) {
+        sql += "VoteName=? ";
+        prepare.push(params.VoteName);
+    }
+
+    sql += "WHERE VID=?";
+    prepare.push(params.VID);
+
+    conn.db.query(sql, prepare, function(err, result) {
+        if (err) {
+            res.send(JSON.stringify({Success : false, Result: err, Message: 'Update Vote Fail, Database Error'}));
+            return;
+        }
+        res.send(JSON.stringify({Success : true, Result: result, Message: 'Update Vote Success'}));
+    });
+};
+
 exports.logout = function(req,res) {
     req.session.destroy();
     res.redirect('/login');

@@ -176,9 +176,18 @@
                 $('.modify-data > .input-data > input').blur(function() {
                     var form = $(this).parent();
                     var action = form.parent().attr('class').replace('modify-data ','');
-                    form.hide();
-                    form.parent().find('.text-data').show();
-                    console.log(form.serialize());
+                    var self = $(this);
+
+                    $.post('/api/' + action, form.serialize())
+                    .done(function(data) {
+                        form.hide();
+                        form.parent().find('.text-data').show();
+                        form.parent().find('.text-data').html(self.val());
+                    })
+                    .fail(function(err) {
+                        self.val(form.parent().find('.text-data').html().trim());
+                        alert('UPDATE Fail');
+                    });
                 });
 
             })(jQuery);
