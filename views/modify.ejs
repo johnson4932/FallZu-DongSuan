@@ -93,11 +93,11 @@
                     .done(function(data) {
                         $('#createGroupModal').modal('hide');
                         var Status = (true == data.Success) ? ('success') : ('danger');
-                        $('#alertMessage').html(data.Message).attr('class','alert alert-' + Status).show();
+                        $('#alertGroupMessage').html(data.Message).attr('class','alert alert-' + Status).show();
                     })
                     .fail(function(err) {
                         $('#createGroupModal').modal('hide');
-                        $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
+                        $('#alertGroupMessage').html('Please Login').attr('class','alert alert-danger').show();
                     });
                 });
 
