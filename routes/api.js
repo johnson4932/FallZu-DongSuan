@@ -156,16 +156,16 @@ exports.modifyVote = function(req,res) {
     var prepare = [];
 
     if (undefined != params.VoteDate) {
-        sql += "VoteDate=? ";
+        sql += "`VoteDate`=? ";
         prepare.push(params.VoteDate);
     }
 
     if (undefined != params.VoteName) {
-        sql += "VoteName=? ";
+        sql += "`VoteName`=? ";
         prepare.push(params.VoteName);
     }
 
-    sql += "WHERE VID=?";
+    sql += "WHERE `VID`=?";
     prepare.push(params.VID);
 
     conn.db.query(sql, prepare, function(err, result) {
@@ -176,6 +176,19 @@ exports.modifyVote = function(req,res) {
         res.send(JSON.stringify({Success : true, Result: result, Message: 'Update Vote Success'}));
     });
 };
+
+exports.modifyGroup = function(req,res) {
+    var params = getParams(req);
+
+    var sql = "UPDATE `vote_group` SET `Title`=? WHERE `VGID`=?";
+    conn.db.query(sql, [params.Title,params.VGID], function(err, result) {
+        if (err) {
+            res.send(JSON.stringify({Success : false, Result: err, Message: 'Update Group Fail, Database Error'}));
+            return;
+        }
+        res.send(JSON.stringify({Success : true, Result: result, Message: 'Update Group Success'}));
+    });
+}
 
 exports.logout = function(req,res) {
     req.session.destroy();
