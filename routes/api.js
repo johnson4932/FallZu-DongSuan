@@ -190,6 +190,35 @@ exports.modifyGroup = function(req,res) {
     });
 }
 
+exports.modifyCandidate = function(req,res) {
+    var params = getParams(req);
+
+    var sql = "UPDATE `vote_candidate` SET ";
+    var prepare = [];
+
+    if (undefined != params.Number) {
+        sql += "`Number`=? ";
+        prepare.push(params.Number);
+    }
+
+    if (undefined != params.Name) {
+        sql += "`Name`=? ";
+        prepare.push(params.Name);
+    }
+
+    sql += "WHERE `UID`=?";
+    prepare.push(params.UID);
+
+    conn.db.query(sql, prepare, function(err, result) {
+        if (err) {
+            res.send(JSON.stringify({Success : false, Result: err, Message: 'Update Candidate Fail, Database Error'}));
+            return;
+        }
+        res.send(JSON.stringify({Success : true, Result: result, Message: 'Update Candidate Success'}));
+    });
+
+}
+
 exports.logout = function(req,res) {
     req.session.destroy();
     res.redirect('/login');
