@@ -46,7 +46,7 @@
                         <% for (var key in Result) { %>
                         <tr class="VoteList<%= Result[key].VID %>">
                             <td><%= Result[key].VoteDate %></td>
-                            <td><a href="/vote/<%= Result[key].VID %>"><%= Result[key].VoteName %></a></td>
+                            <td><a href="/votes/<%= Result[key].VID %>"><%= Result[key].VoteName %></a></td>
                             <td><button class="resetVote btn btn-info">Reset</button></td>
                             <td><a class="btn btn-primary" href="/modify/<%= Result[key].VID %>">Modify</a></td>
                             <td><button class="exportVote btn btn-success">Export</button></td>
