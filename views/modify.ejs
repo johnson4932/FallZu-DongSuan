@@ -144,6 +144,7 @@
                         $('#createGroupModal').modal('hide');
                         var Status = (true == data.Success) ? ('success') : ('danger');
                         $('#alertGroupMessage').html(data.Message).attr('class','alert alert-' + Status).show();
+                        window.location.href = window.location.toString();
                     })
                     .fail(function(err) {
                         $('#createGroupModal').modal('hide');
@@ -160,6 +161,7 @@
                         console.log(data);
                         var Status = (true == data.Success) ? ('success') : ('danger');
                         $('#alertCandidateMessage').html(data.Message).attr('class','alert alert-' + Status).show();
+                        window.location.href = window.location.toString();
                     })
                     .fail(function(err) {
                         $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
