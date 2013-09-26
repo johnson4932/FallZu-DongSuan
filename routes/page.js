@@ -13,8 +13,19 @@ exports.login = function(req,res) {
 };
 
 exports.vote = function(req,res) {
-    var obj = {Login:req.session.login};
-    res.render('votes',obj);
+    var VID = req.params.vid;
+    async.parallel([
+        function(callback){ conn.db.query("SELECT `vote_candidate`.*,`vote_group`.`Title` FROM `vote_candidate` LEFT JOIN `vote_group` ON `vote_candidate`.`VGID` = `vote_group`.`VGID` WHERE `vote_candidate`.`VID`=?", [VID], function(err, result){ callback(err, result);}); },
+        function(callback){ conn.db.query("SELECT * FROM `vote_group` WHERE `VID`=?", [VID], function(err, result){ callback(err, result);}); },
+    ],function(err, result) {
+        var obj = {
+            Login       :req.session.login,
+            VID         :VID,
+            Candidate   :result[0],
+            Group       :result[1]
+        };
+        res.render('votes',obj);
+    });
 };
 
 exports.admin = function(req,res) {
