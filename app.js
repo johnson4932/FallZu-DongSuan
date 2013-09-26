@@ -4,7 +4,9 @@ var express = require('express'),
     io      = require('socket.io').listen(server),
     api     = require('./routes/api'),
     page    = require('./routes/page'),
+    webio   = require('./routes/socket'),
     port    = 1234;
+
 
 app.configure(function() {
     this.set('views', __dirname + '/views');
@@ -40,14 +42,4 @@ app.post('/api/modifyCandidate', api.modifyCandidate);
 app.post('/api/deleteCandidate', api.deleteCandidate);
 app.post('/api/deleteGroup', api.deleteGroup);
 
-io.sockets.on('connection', function(socket) {
-    socket.on('Add', function(obj) {
-        socket.broadcast.emit('add',obj);
-    });
-
-    socket.on('Title', function(obj) {
-        //console.log(obj.Val);
-        //console.log(obj.ID);
-        socket.broadcast.emit('title',obj);
-    });
-});
+io.sockets.on('connection', webio.socket);
