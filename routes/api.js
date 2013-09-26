@@ -88,13 +88,19 @@ exports.createGroup = function(req,res) {
 
         var sql = "INSERT INTO `vote_group` VALUES";
         var insertParams = [];
-        for(var key in params.GroupName) {
-            if ('' == params.GroupName[key]) {
-                continue;
+        if ('string' != typeof params.GroupName) {
+            for(var key in params.GroupName) {
+                if ('' == params.GroupName[key]) {
+                    continue;
+                }
+                sql += "(NULL,?,?),";
+                insertParams.push(params.VID);
+                insertParams.push(params.GroupName[key]);
             }
+        } else {
             sql += "(NULL,?,?),";
             insertParams.push(params.VID);
-            insertParams.push(params.GroupName[key]);
+            insertParams.push(params.GroupName);
         }
 
         conn.db.query(sql.substr(0,sql.length - 1), insertParams, function(err, result) {
