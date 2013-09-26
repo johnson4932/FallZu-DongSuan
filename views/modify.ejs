@@ -190,6 +190,26 @@
                     });
                 });
 
+                ///delCandidate
+                $('.delCandidate').click(function() {
+                    var tr = $(this).parents('tr');
+                    var UID = tr.attr('class').replace('Candidate UID','');
+                    if (!confirm('Sure?')) {
+                        return;
+                    }
+                    $.post('/api/deleteCandidate', {UID:UID})
+                    .done(function(data) {
+                        if (true == data.Success){
+                            tr.remove();
+                        } else {
+                            alert(data.Message);
+                        }
+                    })
+                    .fail(function(err) {
+                        alert('DELETE Fail');
+                    })
+                });
+
                 //delGroup
                 $('.delGroup').click(function() {
                     var tr = $(this).parents('tr');

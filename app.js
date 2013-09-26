@@ -37,6 +37,7 @@ app.post('/api/createAdmin', api.createAdmin);
 app.post('/api/modifyVote', api.modifyVote);
 app.post('/api/modifyGroup', api.modifyGroup);
 app.post('/api/modifyCandidate', api.modifyCandidate);
+app.post('/api/deleteCandidate', api.deleteCandidate);
 app.post('/api/deleteGroup', api.deleteGroup);
 
 io.sockets.on('connection', function(socket) {

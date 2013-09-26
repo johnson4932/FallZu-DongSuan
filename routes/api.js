@@ -218,6 +218,18 @@ exports.modifyCandidate = function(req,res) {
     });
 }
 
+exports.deleteCandidate = function(req,res) {
+    var params = getParams(req);
+
+    conn.db.query("DELETE FROM `vote_candidate` WHERE `UID`=?", [params.UID], function(err, result) {
+        if (err) {
+            res.send(JSON.stringify({Success : false, Result: err, Message: 'Delete Candidate Fail, Database Error'}));
+            return;
+        }
+        res.send(JSON.stringify({Success : true, Result: result, Message: 'Delete Candidate Success'}));
+    });
+}
+
 exports.deleteGroup = function(req,res) {
     var params = getParams(req);
 
