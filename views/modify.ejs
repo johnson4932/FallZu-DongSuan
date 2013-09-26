@@ -41,7 +41,7 @@
                             </thead>
                             <tbody>
                                 <% for (var key in Group) { %>
-                                <tr class="group<%= Group[key].VGID %>">
+                                <tr class="Group<%= Group[key].VGID %>">
                                     <td>
                                         <span class="modify-data modifyGroup">
                                             <span class="text-data">
@@ -193,7 +193,7 @@
                 //delGroup
                 $('.delGroup').click(function() {
                     var tr = $(this).parents('tr');
-                    var VGID = tr.attr('class').replace('group','');
+                    var VGID = tr.attr('class').replace('Group','');
                     if (!confirm('Sure?')) {
                         return;
                     }
