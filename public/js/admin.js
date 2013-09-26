@@ -8,6 +8,7 @@
             $('#createVoteModal').modal('hide');
             var Status = (true == data.Success) ? ('success') : ('danger');
             $('#alertMessage').html(data.Message).attr('class','alert alert-' + Status).show();
+            window.location.href = window.location.toString();
         })
         .fail(function(err) {
             $('#createVoteModal').modal('hide');
