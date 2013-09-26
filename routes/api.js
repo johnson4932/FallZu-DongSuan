@@ -111,7 +111,7 @@ exports.createCandidate = function(req,res) {
     var params = getParams(req);
 
     if ('' != params.VID || '' != params.CandidateNubmer || '' != params.CandidateName) {
-        var sql = "INSERT INTO `vote_candidate` VALUES(NULL,?,0,?,?)";
+        var sql = "INSERT INTO `vote_candidate` VALUES(NULL,?,0,?,?,0)";
         conn.db.query(sql, [params.VID,params.CandidateNubmer,params.CandidateName], function(err, result) {
             if (err) {
                 res.send(JSON.stringify({Success : false, Result: err, Message: 'Create Candidate Fail, Database Error'}));
