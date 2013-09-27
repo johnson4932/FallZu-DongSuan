@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html>
+    <% include head %>
+    <body>
+        <div id="doc">
+            <% include defaultNavbar %>
+            <div class="container">
+                <script src="//<%= Host %>:<%= Port %>/socket.io/socket.io.js"></script>
+                <h3 class="text-center"><%= Vote[0]['VoteDate'] %> - <%= Vote[0]['VoteName'] %></h3>
+                <% if (undefined != Login) { %>
+                <form id="addCNumber" class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control CNum" placeholder="Enter Number">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary submitCnum" >+1</button>
+                    </div>
+                    <div class="form-group">
+                        <button id="minus" class="btn btn-danger submitCnum" >-1</button>
+                    </div>
+                </form>
+                <% } %>
+
+                <table class="table VoteTable">
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th class="nameColumn">Name</th>
+                            <th>Result</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (var user in Candidate) { %>
+                        <tr id="candidate<%= Candidate[user]['UID'] %>" class="votes<%= VID %>">
+                            <td class="Vnum<%= Candidate[user]['Number'] %>"><%= Candidate[user]['Number'] %></td>
+                            <td class="Vname"><%= Candidate[user]['Name'] %></td>
+                            <% if (undefined == Login) { %>
+                            <td class="Vtitle">
+                                <% var title = (null == Candidate[user]['Title']) ? ('') : (Candidate[user]['Title']); %><%= title %>
+                            <% } else { %>
+                            <td class="VtitleSelect">
+                                <select>
+                                    <option value="0">------</option>
+                                    <% for (var key in Group) {  var selected = (Group[key]['VGID'] == Candidate[user]['VGID']) ? ('selected') : (''); %>
+                                    <option value="<%= Group[key]['VGID'] %>" <%= selected %>><%= Group[key]['Title'] %></option>
+                                    <% } %>
+                                </select>
+                            <% } %>
+                            </td>
+                            <td class="Vcount"><%= Candidate[user]['VoteCount'] %></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div><!-- end .container -->
+        </div><!-- end #doc -->
+        <script src="/public/js/jquery.tablesorter.min.js"></script>
+        <script>
+            (function($){
+                var sorting = [[3,1],[0,0]];
+                $('.VoteTable').tablesorter({ sortList : [[0,0],[3,1]] });
+                setInterval( function() {
+                    $('.VoteTable').trigger('update');
+                    $('.VoteTable').trigger('sorton',[sorting]);
+                } , 1000 );
+
+                var socket = io.connect('http://<%= Host %>:<%= Port %>');
+                socket.on('connect', function() {
+                    socket.on('add', function(obj) {
+                        $('#candidate' + obj.UID + ' .Vcount').html(obj.VoteCount);
+                        $('.VoteTable').trigger('update');
+                        $('.VoteTable').trigger('sorton',[sorting]);
+                    });
+
+                    socket.on('title', function(obj) {
+                        $('#candidate' + obj.UID + ' .Vtitle').html(obj.Title);
+
+                        $('#candidate' + obj.UID + ' .VtitleSelect option[selected]').attr('selected',false);
+                        $('#candidate' + obj.UID + ' .VtitleSelect option[value=' + obj.Val + ']').attr('selected',true);
+                     });
+
+                    $('#addCNumber .submitCnum').click(function(e) {
+                        e.preventDefault();
+                        var Cnum = $('#addCNumber .CNum').val();
+                        $('#addCNumber .CNum').val('');
+                        if ('' != Cnum) {
+                            var tr = $('.Vnum' + Cnum ).parent();
+                            if (undefined != tr.attr('id')) {
+                                var UID = tr.attr('id').replace('candidate','');
+                                var count = $('#candidate' + UID + ' .Vcount').html();
+                                var action = $(this).attr('id');
+                                if ('minus' == action) {
+                                    if (!confirm('Are you sure?')) {
+                                        return;
+                                    }
+                                }
+                                $('#candidate' + UID + ' .Vcount').html(('minus' == action) ? (parseInt(count) - 1) : (parseInt(count) + 1) );
+                                $('.VoteTable').trigger('update');
+                                $('.VoteTable').trigger('sorton',[sorting]);
+                                socket.emit('Add', {UID:UID,Action:action});
+                            }
+                        }
+                    });
+
+                    $('.VtitleSelect select').change(function() {
+                        var UID = $(this).parents('tr').attr('id').replace('candidate','');
+                        var val = $(this).val();
+                        var title = $(this).find('option:selected').text();
+
+                        socket.emit('Title', {UID:UID,Val:val,Title:title});
+                    });
+                });
+            })(jQuery);
+        </script>
+    </body>
+</html>
