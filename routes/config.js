@@ -4,4 +4,5 @@ exports.db_host         = '';
 exports.db_name         = '';
 exports.db_account      = '';
 exports.db_passwd       = '';
+exports.db_port         = '';
 
