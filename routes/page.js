@@ -1,5 +1,7 @@
 var conn    = require('../routes/mysql'),
+    config  = require('../routes/config'),
     async   = require('async');
+
 exports.index = function(req,res) {
     if (req.session.login && req.session.name) {
         res.redirect('/admin');
@@ -24,7 +26,9 @@ exports.vote = function(req,res) {
             VID         :VID,
             Candidate   :result[0],
             Group       :result[1],
-            Vote        :result[2]
+            Vote        :result[2],
+            Host        :config.hostname,
+            Port        :config.port
         };
         res.render('votes',obj);
     });
