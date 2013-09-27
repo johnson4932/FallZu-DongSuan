@@ -5,7 +5,8 @@ var express = require('express'),
     api     = require('./routes/api'),
     page    = require('./routes/page'),
     webio   = require('./routes/socket'),
-    port    = 1234;
+    config  = require('./routes/config'),
+    port    = config.port;
 
 
 app.configure(function() {
