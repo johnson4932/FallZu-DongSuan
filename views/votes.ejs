@@ -59,16 +59,13 @@
         <script>
             (function($){
                 var sorting = [[3,1],[0,0]];
-                $('.VoteTable').tablesorter({ sortList : [[0,0],[3,1]] });
-                setInterval( function() {
-                    $('.VoteTable').trigger('update');
-                    $('.VoteTable').trigger('sorton',[sorting]);
-                } , 1000 );
+                $('.VoteTable').tablesorter({ sortList : sorting });
 
                 var socket = io.connect('http://<%= Host %>:<%= Port %>');
                 socket.on('connect', function() {
                     socket.on('add', function(obj) {
                         $('#candidate' + obj.UID + ' .Vcount').html(obj.VoteCount);
+
                         $('.VoteTable').trigger('update');
                         $('.VoteTable').trigger('sorton',[sorting]);
                     });
@@ -96,8 +93,10 @@
                                     }
                                 }
                                 $('#candidate' + UID + ' .Vcount').html(('minus' == action) ? (parseInt(count) - 1) : (parseInt(count) + 1) );
+
                                 $('.VoteTable').trigger('update');
                                 $('.VoteTable').trigger('sorton',[sorting]);
+
                                 socket.emit('Add', {UID:UID,Action:action});
                             }
                         }
