@@ -1,11 +1,12 @@
-var db_options = {
-    host: "127.0.0.1",
-    user: "",
-    password: "",
-    database: "test"
-};
-var mysql = new require("mysql");
-var db = null;
+var mysql       = new require("mysql"),
+    config      = require('./config'),
+    db_options  = {
+        host: config.db_host,
+        user: config.db_account,
+        password: config.db_passwd,
+        database: config.db_name
+    },
+    db = null;
 
 db = mysql.createConnection(db_options);
 db.connect(function(err) {
