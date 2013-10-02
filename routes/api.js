@@ -194,7 +194,7 @@ exports.modifyGroup = function(req,res) {
         }
         res.send(JSON.stringify({Success : true, Result: result, Message: 'Update Group Success'}));
     });
-}
+};
 
 exports.modifyCandidate = function(req,res) {
     var params = getParams(req);
@@ -222,7 +222,7 @@ exports.modifyCandidate = function(req,res) {
         }
         res.send(JSON.stringify({Success : true, Result: result, Message: 'Update Candidate Success'}));
     });
-}
+};
 
 exports.deleteCandidate = function(req,res) {
     var params = getParams(req);
@@ -234,7 +234,7 @@ exports.deleteCandidate = function(req,res) {
         }
         res.send(JSON.stringify({Success : true, Result: result, Message: 'Delete Candidate Success'}));
     });
-}
+};
 
 exports.deleteGroup = function(req,res) {
     var params = getParams(req);
@@ -247,7 +247,24 @@ exports.deleteGroup = function(req,res) {
         res.send(JSON.stringify({Success : true, Result: result, Message: 'Delete Group Success'}));
         conn.db.query("UPDATE `vote_candidate` SET `VGID`='0' WHERE `VGID`=?", [params.VGID]);
     });
-}
+};
+
+exports.resetVote = function(req,res) {
+    var params = getParams(req);
+
+    if (undefined == params.VID) {
+        res.send(JSON.stringify({Success : false, Message: 'Please Input VID'}));
+        return;
+    }
+
+    conn.db.query("UPDATE `vote_candidate` SET `VoteCount`='0', `VGID`='0' WHERE `VID`=?", [params.VID], function(err, result) {
+        if (err) {
+            res.send(JSON.stringify({Success : false, Result: err, Message: 'Reset Vote Fail, Database Error'}));
+            return;
+        }
+        res.send(JSON.stringify({Success : true, Message: 'Reset Vote Success'}));
+    });
+};
 
 exports.logout = function(req,res) {
     req.session.destroy();

@@ -89,6 +89,20 @@
                     });
                 });
 
+                //resetVote
+                $('.resetVote').click(function() {
+                    var VID = $(this).parents('tr').attr('class').replace('VoteList','');
+                    if (confirm('Are you sure??')) {
+                        $.post('/api/resetVote', {VID:VID})
+                        .done(function(data) {
+                            alert(data.Message);
+                        })
+                        .fail(function(err) {
+                            alert('Reset Error');
+                        });
+                    }
+                });
+
             })(jQuery);
         </script>
     </body>
