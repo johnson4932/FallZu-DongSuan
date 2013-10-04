@@ -103,6 +103,24 @@
                     }
                 });
 
+                //deleteVote
+                $('.deleteVote').click(function() {
+                    var tr = $(this).parents('tr');
+                    var VID = tr.attr('class').replace('VoteList','');
+                    if (confirm('Are you sure??')) {
+                        $.post('/api/deleteVote', {VID:VID})
+                        .done(function(data) {
+                            if (data.Success) {
+                                tr.remove();
+                            }
+                            alert(data.Message);
+                        })
+                        .fail(function(err) {
+                            alert('Delete Error');
+                        });
+                    }
+                });
+
             })(jQuery);
         </script>
     </body>

@@ -249,6 +249,25 @@ exports.deleteGroup = function(req,res) {
     });
 };
 
+exports.deleteVote = function(req,res) {
+    var params = getParams(req);
+
+    if (undefined == params.VID) {
+        res.send(JSON.stringify({Success : false, Message: 'Please Input VID'}));
+        return;
+    }
+
+    conn.db.query("DELETE FROM `vote_list` WHERE `VID`=?", [params.VID], function(err, result) {
+        if (err) {
+            res.send(JSON.stringify({Success : false, Result: err, Message: 'Delete Vote Fail, Database Error'}));
+            return;
+        }
+        conn.db.query("DELETE FROM `vote_group` WHERE `VID`=?", [params.VID]);
+        conn.db.query("DELETE FROM `vote_candidate` WHERE `VID`=?", [params.VID]);
+        res.send(JSON.stringify({Success : true, Message: 'Delete Vote Success'}));
+    });
+};
+
 exports.resetVote = function(req,res) {
     var params = getParams(req);
 
