@@ -48,7 +48,7 @@
                             <td><a href="/votes/<%= Result[key].VID %>"><%= Result[key].VoteName %></a></td>
                             <td><button class="resetVote btn btn-info">Reset</button></td>
                             <td><a class="btn btn-primary" href="/modify/<%= Result[key].VID %>">Modify</a></td>
-                            <td><button class="exportVote btn btn-success">Export</button></td>
+                            <td><a class="exportVote btn btn-success" href="/dump/<%= Result[key].VID %>">Export</a></td>
                             <td><button class="deleteVote btn btn-danger">Delete</button></td>
                         </tr>
                         <% } %>
