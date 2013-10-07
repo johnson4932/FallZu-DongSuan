@@ -44,7 +44,8 @@ app.post('/api/modifyGroup', api.modifyGroup);
 app.post('/api/modifyCandidate', api.modifyCandidate);
 app.post('/api/deleteCandidate', api.deleteCandidate);
 app.post('/api/deleteGroup', api.deleteGroup);
-app.post('/api/resetVote', api.resetVote);
 app.post('/api/deleteVote', api.deleteVote);
+app.post('/api/deleteAdmin', api.deleteAdmin);
+app.post('/api/resetVote', api.resetVote);
 
 io.sockets.on('connection', webio.socket);

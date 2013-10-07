@@ -236,6 +236,21 @@ exports.deleteVote = function(req,res) {
     });
 };
 
+exports.deleteAdmin = function(req,res) {
+    if (undefined == req.body.Account) {
+        res.send(JSON.stringify({Success : false, Message: 'Please Input Account'}));
+        return;
+    }
+
+    conn.db.query('DELETE FROM `vote_admin` WHERE `Account`=?', [req.body.Account], function(err, result) {
+        if (err) {
+            res.send(JSON.stringify({Success : false, Result: err, Message: 'Delete Admin Fail, Database Error'}));
+            return;
+        }
+        res.send(JSON.stringify({Success : true, Message: 'Delete Admin Success'}));
+    });
+};
+
 exports.resetVote = function(req,res) {
     if (undefined == req.body.VID) {
         res.send(JSON.stringify({Success : false, Message: 'Please Input VID'}));
