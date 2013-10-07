@@ -142,7 +142,7 @@
                     $.post('/api/createGroup', $('#createGroupModal form').serialize())
                     .done(function(data) {
                         $('#createGroupModal').modal('hide');
-                        var Status = (true == data.Success) ? ('success') : ('danger');
+                        var Status = (data.Success) ? ('success') : ('danger');
                         $('#alertGroupMessage').html(data.Message).attr('class','alert alert-' + Status).show();
                         window.location.href = window.location.toString();
                     })
@@ -159,7 +159,7 @@
                     $.post('/api/createCandidate', $(this).parents('form').serialize())
                     .done(function(data) {
                         console.log(data);
-                        var Status = (true == data.Success) ? ('success') : ('danger');
+                        var Status = (data.Success) ? ('success') : ('danger');
                         $('#alertCandidateMessage').html(data.Message).attr('class','alert alert-' + Status).show();
                         window.location.href = window.location.toString();
                     })
@@ -201,7 +201,7 @@
                     }
                     $.post('/api/deleteCandidate', {UID:UID})
                     .done(function(data) {
-                        if (true == data.Success){
+                        if (data.Success){
                             tr.remove();
                         } else {
                             alert(data.Message);
@@ -221,7 +221,7 @@
                     }
                     $.post('/api/deleteGroup', {VGID:VGID})
                     .done(function(data) {
-                        if (true == data.Success){
+                        if (data.Success){
                             tr.remove();
                         } else {
                             alert(data.Message);
