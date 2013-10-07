@@ -71,7 +71,7 @@
                     })
                     .fail(function(err) {
                         $('#createVoteModal').modal('hide');
-                        $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
+                        $('#alertMessage').html('Create Vote Error').attr('class','alert alert-danger').show();
                     });
                 });
 
@@ -85,7 +85,7 @@
                     })
                     .fail(function(err) {
                         $('#createAdminModal').modal('hide');
-                        $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
+                        $('#alertMessage').html('Create Admin Error').attr('class','alert alert-danger').show();
                     });
                 });
 
