@@ -38,12 +38,15 @@ exports.admin = function(req,res) {
     if ( undefined == req.session.login || undefined == req.session.name) {
         res.redirect('/login');
     } else {
-        var sql = "SELECT * FROM `vote_list` ORDER BY `VID` DESC";
-        conn.db.query(sql, function(err, rows, fiels) {
+        async.parallel([
+            function(callback) { conn.db.query("SELECT * FROM `vote_list` ORDER BY `VID` DESC",function(err, result){callback(err, result);}); },
+            function(callback) { conn.db.query("SELECT * FROM `vote_admin` ORDER BY `Account` ASC",function(err, result){callback(err, result);}); },
+        ],function(err, result) {
             res.render('admin',{
                 Account: req.session.login,
                 Name   : req.session.name,
-                Result : rows
+                Result : result[0],
+                Admin  : result[1]
             });
         });
     }

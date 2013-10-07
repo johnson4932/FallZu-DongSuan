@@ -62,7 +62,20 @@
                         </table>
                     </div><!-- end #VoteDiv -->
                     <div id="AdminDiv" class="tab-pane">
-                        123
+                        <table class="table">
+                            <tr>
+                                <th>Account</th>
+                                <th>Name</th>
+                                <th></th>
+                            </tr>
+                            <% for (var key in Admin) { %>
+                            <tr class="Admin<%= Admin[key].Account %>">
+                                <td><%= Admin[key].Account %></td>
+                                <td><%= Admin[key].Name %></td>
+                                <td><button class="deleteAdmin btn btn-danger">Delete</button></td>
+                            </tr>
+                            <% } %>
+                        </table>
                     </div><!-- end #AdminDiv -->
                 </div><!-- end .tab-content -->
             </div><!-- end .container -->
