@@ -164,7 +164,7 @@
                         window.location.href = window.location.toString();
                     })
                     .fail(function(err) {
-                        $('#alertMessage').html('Please Login').attr('class','alert alert-danger').show();
+                        $('#alertMessage').html('Add Candidate Fail').attr('class','alert alert-danger').show();
                     });
                 });
 
@@ -188,7 +188,7 @@
                     })
                     .fail(function(err) {
                         self.val(form.parent().find('.text-data').html().trim());
-                        alert('UPDATE Fail');
+                        $('#alertMessage').html('Update Fail').attr('class','alert alert-danger').show();
                     });
                 });
 
@@ -203,12 +203,12 @@
                     .done(function(data) {
                         if (data.Success){
                             tr.remove();
-                        } else {
-                            alert(data.Message);
                         }
+                        var Status = (data.Success) ? ('success') : ('danger');
+                        $('#alertCandidateMessage').html(data.Message).attr('class','alert alert-' + Status).show();
                     })
                     .fail(function(err) {
-                        alert('DELETE Fail');
+                        $('#alertCandidateMessage').html('DELETE Fail').attr('class','alert alert-danger').show();
                     })
                 });
 
@@ -223,12 +223,12 @@
                     .done(function(data) {
                         if (data.Success){
                             tr.remove();
-                        } else {
-                            alert(data.Message);
                         }
+                        var Status = (data.Success) ? ('success') : ('danger');
+                        $('#alertGroupMessage').html(data.Message).attr('class','alert alert-' + Status).show();
                     })
                     .fail(function(err) {
-                        alert('DELETE Fail');
+                        $('#alertGroupMessage').html('DELETE Fail').attr('class','alert alert-danger').show();
                     })
                 });
 
