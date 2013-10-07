@@ -12,6 +12,7 @@ var express = require('express'),
 app.configure(function() {
     this.set('views', __dirname + '/views');
     this.set('view engine', 'ejs');
+    this.use(express.bodyParser());
     this.use(express.cookieParser());
     this.use(express.session({secret : "secret"}));
     this.use('/public',express.static(__dirname + '/public'));

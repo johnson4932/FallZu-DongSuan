@@ -2,22 +2,10 @@ var conn    = require('../routes/mysql'),
     crypto  = require('crypto');
     qs      = require('querystring');
 
-function getParams(req) {
-    var data  = "",
-        params = null;
-    req.addListener("data", function(chunk) {
-        data += chunk;
-        params =  qs.parse(data);
-    });
-    return params;
-}
-
 exports.login = function(req,res) {
-    var params = getParams(req);
-
     var sql = "SELECT * FROM `vote_admin` WHERE Account=? AND Password=? LIMIT 1";
-    var md5 = crypto.createHash('md5').update(params.Passwd).digest("hex");
-    conn.db.query(sql, [params.Account, md5], function(err, rows, fiels) {
+    var md5 = crypto.createHash('md5').update(req.body.Passwd).digest("hex");
+    conn.db.query(sql, [req.body.Account, md5], function(err, rows, fiels) {
         if (0 == rows.length) {
             res.redirect('/login/error');
         } else {
@@ -38,11 +26,9 @@ exports.APIsession = function(req,res,next) {
 };
 
 exports.createVote = function(req,res) {
-    var params = getParams(req);
-
-    if ('' != params.VoteName && '' != params.VoteDate) {
+    if ('' != req.body.VoteName && '' != req.body.VoteDate) {
         sql = "INSERT INTO `vote_list` VALUES(NULL,?,?)";
-        conn.db.query(sql,[params.VoteName, params.VoteDate], function(err,result) {
+        conn.db.query(sql,[req.body.VoteName, req.body.VoteDate], function(err,result) {
             if (err) {
                 res.send(JSON.stringify({Success : false, Result: err, Message: 'Create Vote Fail, Database Error'}));
                 return;
@@ -55,11 +41,9 @@ exports.createVote = function(req,res) {
 };
 
 exports.createGroup = function(req,res) {
-    var params = getParams(req);
-
-    if (params.clone) {
+    if (req.body.clone) {
         var sql = "SELECT `Title` FROM `vote_group` WHERE `VID`=?";
-        conn.db.query(sql, [params.cloneVote], function(err, rows, fiels) {
+        conn.db.query(sql, [req.body.cloneVote], function(err, rows, fiels) {
             if (err) {
                 res.send(JSON.stringify({Success : false, Result: err, Message: 'Database Error'}));
                 return;
@@ -68,7 +52,7 @@ exports.createGroup = function(req,res) {
             var insertParams = [];
             for (var key in rows) {
                 insertSQL += "(NULL,?,?),";
-                insertParams.push(params.VID);
+                insertParams.push(req.body.VID);
                 insertParams.push(rows[key].Title);
             }
 
@@ -81,26 +65,26 @@ exports.createGroup = function(req,res) {
             });
         });
     } else {
-        if (0 == params.GroupName.length) {
+        if (0 == req.body.GroupName.length) {
             res.send(JSON.stringify({Success : false, Message: 'Please input params'}));
             return;
         }
 
         var sql = "INSERT INTO `vote_group` VALUES";
         var insertParams = [];
-        if ('string' != typeof params.GroupName) {
-            for(var key in params.GroupName) {
-                if ('' == params.GroupName[key]) {
+        if ('string' != typeof req.body.GroupName) {
+            for(var key in req.body.GroupName) {
+                if ('' == req.body.GroupName[key]) {
                     continue;
                 }
                 sql += "(NULL,?,?),";
-                insertParams.push(params.VID);
-                insertParams.push(params.GroupName[key]);
+                insertParams.push(req.body.VID);
+                insertParams.push(req.body.GroupName[key]);
             }
         } else {
             sql += "(NULL,?,?),";
-            insertParams.push(params.VID);
-            insertParams.push(params.GroupName);
+            insertParams.push(req.body.VID);
+            insertParams.push(req.body.GroupName);
         }
 
         conn.db.query(sql.substr(0,sql.length - 1), insertParams, function(err, result) {
@@ -114,11 +98,9 @@ exports.createGroup = function(req,res) {
 };
 
 exports.createCandidate = function(req,res) {
-    var params = getParams(req);
-
-    if ('' != params.VID || '' != params.CandidateNubmer || '' != params.CandidateName) {
+    if ('' != req.body.VID || '' != req.body.CandidateNubmer || '' != req.body.CandidateName) {
         var sql = "INSERT INTO `vote_candidate` VALUES(NULL,?,0,?,?,0)";
-        conn.db.query(sql, [params.VID,params.CandidateNubmer,params.CandidateName], function(err, result) {
+        conn.db.query(sql, [req.body.VID,req.body.CandidateNubmer,req.body.CandidateName], function(err, result) {
             if (err) {
                 res.send(JSON.stringify({Success : false, Result: err, Message: 'Create Candidate Fail, Database Error'}));
                 return;
@@ -132,17 +114,15 @@ exports.createCandidate = function(req,res) {
 };
 
 exports.createAdmin = function(req,res) {
-    var params = getParams(req);
-
-    if ('' != params.Account && '' != params.Passwd) {
-        if (params.Passwd != params.PasswdConfirm) {
+    if ('' != req.body.Account && '' != req.body.Passwd) {
+        if (req.body.Passwd != req.body.PasswdConfirm) {
             res.send(JSON.stringify({Success : false, Message: 'Password is different'}));
             return;
         }
 
         var sql = "INSERT INTO `vote_admin` VALUES(?,?,?)";
-        var md5 = crypto.createHash('md5').update(params.Passwd).digest("hex");
-        conn.db.query(sql, [params.Account,md5,params.AdminName], function(err, result) {
+        var md5 = crypto.createHash('md5').update(req.body.Passwd).digest("hex");
+        conn.db.query(sql, [req.body.Account,md5,req.body.AdminName], function(err, result) {
             if (err) {
                 res.send(JSON.stringify({Success : false, Result: err, Message: 'Create Admin Fail, Database Error'}));
                 return;
@@ -156,23 +136,21 @@ exports.createAdmin = function(req,res) {
 };
 
 exports.modifyVote = function(req,res) {
-    var params = getParams(req);
-
     var sql = "UPDATE `vote_list` SET ";
     var prepare = [];
 
-    if (undefined != params.VoteDate) {
+    if (undefined != req.body.VoteDate) {
         sql += "`VoteDate`=? ";
-        prepare.push(params.VoteDate);
+        prepare.push(req.body.VoteDate);
     }
 
-    if (undefined != params.VoteName) {
+    if (undefined != req.body.VoteName) {
         sql += "`VoteName`=? ";
-        prepare.push(params.VoteName);
+        prepare.push(req.body.VoteName);
     }
 
     sql += "WHERE `VID`=?";
-    prepare.push(params.VID);
+    prepare.push(req.body.VID);
 
     conn.db.query(sql, prepare, function(err, result) {
         if (err) {
@@ -184,10 +162,8 @@ exports.modifyVote = function(req,res) {
 };
 
 exports.modifyGroup = function(req,res) {
-    var params = getParams(req);
-
     var sql = "UPDATE `vote_group` SET `Title`=? WHERE `VGID`=?";
-    conn.db.query(sql, [params.Title,params.VGID], function(err, result) {
+    conn.db.query(sql, [req.body.Title,req.body.VGID], function(err, result) {
         if (err) {
             res.send(JSON.stringify({Success : false, Result: err, Message: 'Update Group Fail, Database Error'}));
             return;
@@ -197,23 +173,21 @@ exports.modifyGroup = function(req,res) {
 };
 
 exports.modifyCandidate = function(req,res) {
-    var params = getParams(req);
-
     var sql = "UPDATE `vote_candidate` SET ";
     var prepare = [];
 
-    if (undefined != params.Number) {
+    if (undefined != req.body.Number) {
         sql += "`Number`=? ";
-        prepare.push(params.Number);
+        prepare.push(req.body.Number);
     }
 
-    if (undefined != params.Name) {
+    if (undefined != req.body.Name) {
         sql += "`Name`=? ";
-        prepare.push(params.Name);
+        prepare.push(req.body.Name);
     }
 
     sql += "WHERE `UID`=?";
-    prepare.push(params.UID);
+    prepare.push(req.body.UID);
 
     conn.db.query(sql, prepare, function(err, result) {
         if (err) {
@@ -225,9 +199,7 @@ exports.modifyCandidate = function(req,res) {
 };
 
 exports.deleteCandidate = function(req,res) {
-    var params = getParams(req);
-
-    conn.db.query("DELETE FROM `vote_candidate` WHERE `UID`=?", [params.UID], function(err, result) {
+    conn.db.query("DELETE FROM `vote_candidate` WHERE `UID`=?", [req.body.UID], function(err, result) {
         if (err) {
             res.send(JSON.stringify({Success : false, Result: err, Message: 'Delete Candidate Fail, Database Error'}));
             return;
@@ -237,46 +209,40 @@ exports.deleteCandidate = function(req,res) {
 };
 
 exports.deleteGroup = function(req,res) {
-    var params = getParams(req);
-
-    conn.db.query("DELETE FROM `vote_group` WHERE `VGID`=?", [params.VGID], function(err, result) {
+    conn.db.query("DELETE FROM `vote_group` WHERE `VGID`=?", [req.body.VGID], function(err, result) {
         if (err) {
             res.send(JSON.stringify({Success : false, Result: err, Message: 'Delete Group Fail, Database Error'}));
             return;
         }
         res.send(JSON.stringify({Success : true, Result: result, Message: 'Delete Group Success'}));
-        conn.db.query("UPDATE `vote_candidate` SET `VGID`='0' WHERE `VGID`=?", [params.VGID]);
+        conn.db.query("UPDATE `vote_candidate` SET `VGID`='0' WHERE `VGID`=?", [req.body.VGID]);
     });
 };
 
 exports.deleteVote = function(req,res) {
-    var params = getParams(req);
-
-    if (undefined == params.VID) {
+    if (undefined == req.body.VID) {
         res.send(JSON.stringify({Success : false, Message: 'Please Input VID'}));
         return;
     }
 
-    conn.db.query("DELETE FROM `vote_list` WHERE `VID`=?", [params.VID], function(err, result) {
+    conn.db.query("DELETE FROM `vote_list` WHERE `VID`=?", [req.body.VID], function(err, result) {
         if (err) {
             res.send(JSON.stringify({Success : false, Result: err, Message: 'Delete Vote Fail, Database Error'}));
             return;
         }
-        conn.db.query("DELETE FROM `vote_group` WHERE `VID`=?", [params.VID]);
-        conn.db.query("DELETE FROM `vote_candidate` WHERE `VID`=?", [params.VID]);
+        conn.db.query("DELETE FROM `vote_group` WHERE `VID`=?", [req.body.VID]);
+        conn.db.query("DELETE FROM `vote_candidate` WHERE `VID`=?", [req.body.VID]);
         res.send(JSON.stringify({Success : true, Message: 'Delete Vote Success'}));
     });
 };
 
 exports.resetVote = function(req,res) {
-    var params = getParams(req);
-
-    if (undefined == params.VID) {
+    if (undefined == req.body.VID) {
         res.send(JSON.stringify({Success : false, Message: 'Please Input VID'}));
         return;
     }
 
-    conn.db.query("UPDATE `vote_candidate` SET `VoteCount`='0', `VGID`='0' WHERE `VID`=?", [params.VID], function(err, result) {
+    conn.db.query("UPDATE `vote_candidate` SET `VoteCount`='0', `VGID`='0' WHERE `VID`=?", [req.body.VID], function(err, result) {
         if (err) {
             res.send(JSON.stringify({Success : false, Result: err, Message: 'Reset Vote Fail, Database Error'}));
             return;
