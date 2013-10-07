@@ -100,7 +100,7 @@
                     $.post('/api/createVote', $('#createVoteModal form').serialize())
                     .done(function(data) {
                         $('#createVoteModal').modal('hide');
-                        var Status = (true == data.Success) ? ('success') : ('danger');
+                        var Status = (data.Success) ? ('success') : ('danger');
                         $('#alertMessage').html(data.Message).attr('class','alert alert-' + Status).show();
                         window.location.href = window.location.toString();
                     })
@@ -115,7 +115,7 @@
                     $.post('/api/createAdmin', $('#createAdminModal form').serialize())
                     .done(function(data) {
                         $('#createAdminModal').modal('hide');
-                        var Status = (true == data.Success) ? ('success') : ('danger');
+                        var Status = (data.Success) ? ('success') : ('danger');
                         $('#alertMessage').html(data.Message).attr('class','alert alert-' + Status).show();
                     })
                     .fail(function(err) {
