@@ -198,6 +198,19 @@ exports.modifyCandidate = function(req,res) {
     });
 };
 
+exports.modifyAdmin = function(req,res) {
+    if (undefined != req.body.Account && undefined != req.body.Name) {
+    } else {
+    }
+    conn.db.query("UPDATE `vote_admin` SET `Name`=? WHERE `Account`=?", [req.body.Name,req.body.Account], function(err, result){
+        if (err) {
+            res.send(JSON.stringify({Success : false, Result: err, Message: 'Update Admin Fail, Database Error'}));
+            return;
+        }
+        res.send(JSON.stringify({Success : true, Result: result, Message: 'Update Admin Success'}));
+    });
+};
+
 exports.deleteCandidate = function(req,res) {
     conn.db.query("DELETE FROM `vote_candidate` WHERE `UID`=?", [req.body.UID], function(err, result) {
         if (err) {

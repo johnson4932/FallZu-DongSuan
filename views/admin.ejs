@@ -71,7 +71,17 @@
                             <% for (var key in Admin) { %>
                             <tr class="Admin<%= Admin[key].Account %>">
                                 <td><%= Admin[key].Account %></td>
-                                <td><%= Admin[key].Name %></td>
+                                <td>
+                                    <span class="modify-data modifyAdmin">
+                                        <span class="text-data">
+                                            <%= Admin[key].Name %>
+                                        </span>
+                                        <form class="input-data">
+                                            <input type="hidden" name="Account" value="<%= Admin[key].Account %>">
+                                            <input type="text" class="form-control" name="Name" value="<%= Admin[key].Name  %>">
+                                        </form>
+                                    </span>
+                                </td>
                                 <td><button class="deleteAdmin btn btn-danger">Delete</button></td>
                             </tr>
                             <% } %>
@@ -83,6 +93,7 @@
         <script>
             (function($){
                 $('#alertMessage').hide();
+                $('.modify-data > .input-data').hide();
 
                 //createVoteModal
                 $('#createVoteModal .submit').click(function() {
@@ -167,6 +178,29 @@
                             alert('Delete Error');
                         });
                     }
+                });
+
+                //Modify
+                $('.modify-data > .text-data').click(function() {
+                    $(this).hide();
+                    $(this).parent().find('.input-data').show().find('input').focus();
+                });
+
+                $('.modify-data > .input-data > input').blur(function() {
+                    var form = $(this).parent();
+                    var action = form.parent().attr('class').replace('modify-data ','');
+                    var self = $(this);
+
+                    $.post('/api/' + action, form.serialize())
+                    .done(function(data) {
+                        form.hide();
+                        form.parent().find('.text-data').show();
+                        form.parent().find('.text-data').html(self.val());
+                    })
+                    .fail(function(err) {
+                        self.val(form.parent().find('.text-data').html().trim());
+                        alert('UPDATE Fail');
+                    });
                 });
 
             })(jQuery);
