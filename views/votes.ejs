@@ -61,6 +61,11 @@
                 var sorting = [[3,1],[0,0]];
                 $('.VoteTable').tablesorter({ sortList : sorting });
 
+                setInterval(function(){
+                    $('.VoteTable').trigger('update');
+                    $('.VoteTable').trigger('sorton',[sorting]);
+                },1000);
+
                 var socket = io.connect('http://<%= Host %>:<%= Port %>');
                 socket.on('connect', function() {
                     socket.on('add', function(obj) {
