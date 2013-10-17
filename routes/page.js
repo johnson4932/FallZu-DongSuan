@@ -81,7 +81,7 @@ exports.dump = function(req,res) {
         var VID = req.params.vid;
         async.parallel([
             function(callback) { conn.db.query("SELECT `VoteName`,`VoteDate` FROM `vote_list` WHERE `VID`=? LIMIT 1", [VID], function(err, result){ callback(err, result);}); },
-            function(callback) { conn.db.query("SELECT `vote_candidate`.`Number`,`vote_candidate`.`Name`,`vote_candidate`.`VoteCount`,`vote_group`.`Title` FROM `vote_candidate` LEFT JOIN `vote_group` ON `vote_candidate`.`VGID`=`vote_group`.`VGID` WHERE `vote_candidate`.`VID`=?", [VID], function(err, result){ callback(err, result);}); }
+            function(callback) { conn.db.query("SELECT `vote_candidate`.`Number`,`vote_candidate`.`Name`,`vote_candidate`.`VoteCount`,`vote_group`.`Title` FROM `vote_candidate` LEFT JOIN `vote_group` ON `vote_candidate`.`VGID`=`vote_group`.`VGID` WHERE `vote_candidate`.`VID`=? ORDER BY `vote_candidate`.`VoteCount` DESC", [VID], function(err, result){ callback(err, result);}); }
         ],function(err, result) {
             var filename = result[0][0]['VoteName'] + result[0][0]['VoteDate'];
             res.setHeader('Content-Type', 'application/octet-stream');
