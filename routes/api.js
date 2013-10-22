@@ -3,7 +3,7 @@ var conn    = require('../routes/mysql'),
     qs      = require('querystring');
 
 function keepalive() {
-  connection.query('select 1', [], function(err, result) {
+  conn.db.query('select 1', [], function(err, result) {
     if(err) return console.log(err);
     // Successul keepalive
   });
