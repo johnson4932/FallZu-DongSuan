@@ -2,6 +2,15 @@ var conn    = require('../routes/mysql'),
     crypto  = require('crypto');
     qs      = require('querystring');
 
+function keepalive() {
+  connection.query('select 1', [], function(err, result) {
+    if(err) return console.log(err);
+    // Successul keepalive
+  });
+}
+setInterval(keepalive, 1000*60*5);
+
+
 exports.login = function(req,res) {
     var sql = "SELECT * FROM `vote_admin` WHERE Account=? AND Password=? LIMIT 1";
     var md5 = crypto.createHash('md5').update(req.body.Passwd).digest("hex");

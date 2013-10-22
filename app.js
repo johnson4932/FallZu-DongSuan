@@ -50,12 +50,3 @@ app.post('/api/deleteAdmin', api.deleteAdmin);
 app.post('/api/resetVote', api.resetVote);
 
 io.sockets.on('connection', webio.socket);
-
-
-function keepalive() {
-  connection.query('select 1', [], function(err, result) {
-    if(err) return console.log(err);
-    // Successul keepalive
-  });
-}
-setInterval(keepalive, 1000*60*5);
