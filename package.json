@@ -4,7 +4,7 @@
     "description": "This is a Voting system",
     "version": "0.0.1",
     "dependencies": {
-        "express": ">= 3.4.0",
+        "express": "= 3.4.0",
         "ejs": ">= 0.8.4",
         "mysql": ">=2.0.0-alpha9",
         "socket.io": ">=0.9.16",
